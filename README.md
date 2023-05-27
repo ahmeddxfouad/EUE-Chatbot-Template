@@ -14,7 +14,7 @@ In this Workshop we will :
 - [P5js](https://p5js.org/)
 
 ## First Session
-We Will try to download the template and make few changes then create our own repo, and push the changes on our repo using our accounts credentials.//
+We Will try to download the template and make few changes then create our own repo, and push the changes on our repo using our accounts credentials.
 
 ## Extra Resources
 - [Git cheat sheet](https://education.github.com/git-cheat-sheet-education.pdf)
