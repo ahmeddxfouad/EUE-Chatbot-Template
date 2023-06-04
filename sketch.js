@@ -1,35 +1,50 @@
 
 let logo;
-
-
+let HumanText;
+let BotText;
 let inp;
 let sendBtn;
-let HumanText = "";
-let botText = "";
 let navigateBtn;
+let speachBtn;
+let talkBtn;
+let mode=0;
+var myVoice;
+
+let speechRec;
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  background('#000080');
+    createCanvas(windowWidth, windowHeight);
+    
+    background('#000080');
 
 
-  imageMode(CENTER); //adjust image mode
-  //Using a call back function to load first image
-  loadImage('EUE-Logo.png', logo => {
+    imageMode(CENTER);             //adjust image mode
+    //Using a call back function to load first image
+    loadImage('EUE-Logo.png', logo => {
     image(logo, width / 2, height / 2 - 100, 500, 150);
-  });
+    });
     
-    //input field
+     imageMode(CENTER); //adjust image mode
+        //Using a call back function to load first image
+            loadImage('EUE-Logo.png', logo => {
+                image(logo, width / 2, height / 2 - 100, 500, 150);
+            });
+    
+    
+    //draw input field
+    //textSize(30);
+    //text("Enter Here: ",50, height-320)
     inp = createInput('');
-    inp.position(50, height - 300);
-    inp.attribute('placeholder', "Please eneter your questions");
-    inp.size(windowWidth - 250);
+    inp.attribute('placeholder',"Please enter your question here!")
+    inp.position(50, height-300);
+    inp.size(windowWidth-250);
     inp.input(HumanInputEvent);
-    
-    //Send button
+
+    //draw button
     sendBtn = createButton('Send');
-    sendBtn.position(width-150, height - 300);
+    sendBtn.position(width-150, height-300);
     sendBtn.size(100);
-    sendBtn.mousePressed(sumbitQuestion);
+    sendBtn.mousePressed(submitQuestion);
+
     
     //navigation button
     navigateBtn = createButton('Use Sound');
@@ -38,57 +53,134 @@ function setup() {
     navigateBtn.mousePressed(navigate);
     
     
-  
- 
+    //speak button
+    speachBtn = createButton('Speak');
+    speachBtn.position(width-150, 400);
+    speachBtn.size(100);
+    speachBtn.mousePressed(gotSpeech);
+    
+    //talk button
+    talkBtn = createButton('Talk');
+    talkBtn.position(width-150, 400);
+    talkBtn.size(100);
+    talkBtn.mousePressed(talk);
+    
+    
+    //call variable and set up library here(or in a function)
+    //don't forget to look for a call back function
+    speechRec = new p5.SpeechRec('en-us', gotSpeech);
+    
+     //configure speech rec mode
+        let continuous = true;
+        let interimResults = false;
+        speechRec.start(continuous, interimResults);
+    
+    gotSpeech();
+    
+    //my Voice
+    myVoice = new p5.Speech(); // new P5.Speech object
+     myVoice.speak("say something");
+    
 
-
+    
 }
 
-function HumanInputEvent(){
-//    console.log("this is the user input: "+ this.value());
+
+function HumanInputEvent() {
+  console.log('you are typing: ', this.value());
+//    HumanText = this.value();
 }
 
-function sumbitQuestion(){
-     setTimeout( () =>{
+function navigate(){
+    console.log("navigate");
+    console.log("mode: "+mode);
+    if(mode == 0){
+        mode =1;
+    }
+    else{
+        mode = 0;
+    }
+    
+}
+
+function submitQuestion(){
+    setTimeout( () =>{
     console.log("inp.value: "+inp.value());
     console.log("Mouse is pressed!");
     HumanText = inp.value();
     }, 2000);
-    
 }
 
-function navigate(){
-    //
-    inp.hide();
-    sendBtn.hide();
+function gotSpeech(){
+    console.log("gotSpeech")
+    if (speechRec.resultValue) {
+        let said = speechRec.resultString;
+    
+        // display user input
+        console.log(said);
+    
+        }
 }
+
+function talk(){
+         setTimeout( () =>{
+             myVoice.speak(BotText);
+        }, 2000);
+   
+}
+
 
 function draw() {
-  //background(220);
-   
-     //draw an empty textbox
+    if(mode == 0 ){ 
+        inp.show();
+        sendBtn.show();  
+        
+        speachBtn.hide();
+        
+//        speechRec.pause();
+        
+    }
+    else if(mode == 1){
+        inp.hide();
+        sendBtn.hide();      
+        
+        speachBtn.show();
+        
+        if (speechRec.resultValue) {
+            let said = speechRec.resultString;
+            HumanText = said;
+            // display user input
+            console.log(said);
+    
+        }
+
+        
+    }
+    
+    
+    //draw an empty textbox
+    let rectX = width / 2;
+    let rectY = height - 125;
     fill("white");
-        rectX = width / 2;
-        rectY = height - 125;
-        rectMode(CENTER);
-        rect(rectX, rectY, windowWidth - 50, 200, 20);
+    rectMode(CENTER);
+    rect(rectX, rectY, windowWidth - 50, 200, 20);
     
     //Human Text
     textSize(20);
     textAlign(LEFT);
     fill("black");
-    textFont('Arial');
-    text("> Human text: "+HumanText,  (width/15) , height - 200);
+    if(HumanText == undefined)
+        HumanText = "";
     
-    if(HumanText.includes("hello"))
-        {
-            botText = "Hello There!"
-        }
-    else if (HumanText.includes("good morning")){
-            botText = "Guten Morgan"
-    }else if(HumanText != ""){
-        botText = "I can't understand";
-    }
+    text("> Human Text: "+HumanText,(width/15) ,height-200); //draw Human Text within a box
+    
+    
+    if(BotText == undefined)
+        BotText = "";
+    else if(HumanText.includes("hello"))
+        BotText = "Hello There!";
+    else if(HumanText.includes("good morning"))
+        BotText = "Good Morning Sir!";
     
     //draw Bot text inside the box
     let padding = 20;
@@ -96,10 +188,10 @@ function draw() {
     textAlign(RIGHT);
     strokeWeight(1);
     stroke(20);
-    text(botText+" : Bot Respond <", rectX - padding, rectY + (3*padding), windowWidth - 75, 190);
+    text(BotText+" : Bot Respond <", rectX - padding, rectY + (3*padding), windowWidth - 75, 190); //draw Bot Text within a box
     
     
-    
+
   //gotSpeech();
 }
 
