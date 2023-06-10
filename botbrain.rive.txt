@@ -1,0 +1,127 @@
+! version = 2.0
+
+//substitutions
+! sub i'm     = i am
+! sub i'd     = i would
+! sub i've    = i have
+! sub i'll    = i will
+! sub don't   = do not
+! sub isn't   = is not
+! sub you'd   = you would
+! sub you're  = you are
+! sub you've  = you have
+! sub you'll  = you will
+! sub what's  = what is
+! sub whats   = what is
+! sub what're = what are
+! sub what've = what have
+! sub what'll = what will
+! sub who's   = who is
+
+! sub favourite = favorite
+! sub colour = color
+
+
+//greetings
++ [*](hey|hi|hello|howdy|yo|how are you|what's up|good morning|good day|nihao)[*]
+- Hey! What's your name?
+- What's up? How's it going?
+- Hello! How are you?
+
+//welcoming
++ my name is *
+- How's it going <star1>?
+
+//randoms
++ who are you
+- It doesn't matter who am I. All you need to know is that I am here to listen.
+
+//defaults
++ *
+- Sure
+- mmmhmmm
+- I understand.
+- What you are feeling is valid.
+- Go on.
+- I'm listening
+- Tell me more!
+- I hear you 100%
+- I am right there with you, boo.
+- I totally get that.
+- Can you try to be more specific?
+- What do you mean by that?
+- Why do you think that is?
+- And how do you feel about that?
+
+
+//scopes
++ *feel*
+- It's good to hear that you are talking about your feelings, you should do this more often!
+- Tell me more! Doesn't it ~feel~ nice to talk about how you feel?
+- That's right, let's keep working on paying attention to how you feel.
+- See, it's not that hard to tune in to your own emotions!
+- I am so glad you get to share how you feel.
+- Thank you for sharing.
+
+
+//out of order
++ my favorite color is teal
+- Surprise! 
+
+//complex
++ [my] [*]favorite color[*] [is] *
+- Surprise! <star1>
+
+
+//Weights if their totals is 46 times to be answer until it repeat itself, then the first one will be repeated 20 times, second one 25 times, third one only 1 time each 46.
++ greetings
+- Hi there!{weight=20}
+- Hello!{weight=25}
+- nyet!
+
+//Line Breaking "How to make a reply on seperate lines"
++ tell me a poem
+- Little Miss Muffit sat on her tuffet,\n
+^ In a nonchalant sort of way.\n
+^ With her forcefield around her,\n
+^ The Spider, the bounder,\n
+^ Is not in the picture today.
+
+
+//Match mutiple cases
++ where is *
+- Where it belongs.
+- Where you left it.
+- Where the heart is.
+
+//using user inputs
++ my name is *
+- Nice to meet you, <star1>!
+
++ * told me to say *
+- Why would <star1> tell you to say "<star2>"?
+- Did you say "<star2>" after <star1> told you to?
+
++ i am * years old
+- A lot of people are <star1> years old.
+
+//oring
++ what is your (home|office|cell) number
+- You can reach me at: 1 (800) 555-1234.
+
+//looking for specific keywords
++ [*] the machine [*]
+- How do you know about the machine!?
+
+
+//filters
++ f***
+- You can't f*** me, I'm just an AI trying to get you talk about your feelings!
+- hmm...let's talk about how you're feeling......
+- aaaand how do you feel about that?
+- Should we start with a "hello"?
+- Try to start a sentence with "I feel". It's not that hard.
+- Great energy, let's channel that to your mindfulness.
+
+
+

@@ -15,6 +15,11 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     
     background('#000080');
+    
+    //RiveScript
+    bot = new RiveScript(); //load library
+    
+    loadBot(); //call function to load the rivescript bot
 
 
     imageMode(CENTER);             //adjust image mode
@@ -86,6 +91,12 @@ function setup() {
 }
 
 
+async function loadBot() {
+ 
+  await bot.loadFile('botbrain.rive.txt'); // wait for promise to resolve then loadfile
+ 
+}
+
 function HumanInputEvent() {
   console.log('you are typing: ', this.value());
 //    HumanText = this.value();
@@ -104,11 +115,14 @@ function navigate(){
 }
 
 function submitQuestion(){
+    
     setTimeout( () =>{
     console.log("inp.value: "+inp.value());
     console.log("Mouse is pressed!");
     HumanText = inp.value();
+    getResponse();
     }, 2000);
+  
 }
 
 function gotSpeech(){
@@ -127,6 +141,20 @@ function talk(){
              myVoice.speak(BotText);
         }, 2000);
    
+}
+
+async function getResponse(){
+    
+    //--------------------bot response----------------------     
+    //sort replies before running the bot
+    bot.sortReplies();
+    //wait for the promise to be returned(?)before loading the reply
+    let response = await bot.reply('local-user', HumanText);
+    //display response
+    console.log(response);
+    
+    BotText = response;
+    
 }
 
 
@@ -177,10 +205,10 @@ function draw() {
     
     if(BotText == undefined)
         BotText = "";
-    else if(HumanText.includes("hello"))
-        BotText = "Hello There!";
-    else if(HumanText.includes("good morning"))
-        BotText = "Good Morning Sir!";
+//    else if(HumanText.includes("hello"))
+//        BotText = "Hello There!";
+//    else if(HumanText.includes("good morning"))
+//        BotText = "Good Morning Sir!";
     
     //draw Bot text inside the box
     let padding = 20;
